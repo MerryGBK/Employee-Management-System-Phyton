@@ -1,0 +1,118 @@
+employees = {}
+
+def add_employee():
+    try:
+        emp_id = input("Enter Employee ID: ").strip()
+        if emp_id in employees:
+            print("Error: Employee ID already exists!")
+            return
+        name = input("Enter name: ").strip()
+        age = int(input("Enter age: ").strip())
+        department = input("Enter department: ").strip()
+        salary = float(input("Enter salary: ").strip())
+        employees[emp_id] = (name, age, department, salary)
+        print("Employee added successfully!")
+    except ValueError:
+        print("Error: Invalid input! Age must be an integer and salary must be a number.")
+
+def view_employees():
+    if not employees:
+        print("No employee found!")
+        return
+    print("\nEmployee List:")
+    print("ID\tName\tAge\tDepartment\tSalary")
+    print("-" * 50)
+    for emp_id, details in employees.items():
+        print(f"{emp_id}\t{details[0]}\t{details[1]}\t{details[2]}\t{details[3]}")
+
+def search_employee():
+    emp_id = input("Enter Employee ID to search: ").strip()
+    if emp_id in employees:
+        details = employees[emp_id]
+        print(f"\nEmployee Found:\nID: {emp_id}\nName: {details[0]}\nAge: {details[1]}\nDepartment: {details[2]}\nSalary: {details[3]}")
+    else:
+        print("Error: Employee not found!")
+
+def update_employee():
+    emp_id = input("Enter Employee ID to update: ").strip()
+    if emp_id in employees:
+        name, age, department, salary = employees[emp_id]
+        print("Leave blank to keep current value.")
+        new_name = input(f"Enter new Name ({name}): ").strip() or name
+        new_age = input(f"Enter new Age ({age}): ").strip()
+        new_department = input(f"Enter new Department ({department}): ").strip() or department
+        new_salary = input(f"Enter new Salary ({salary}): ").strip()
+        try:
+            age = int(new_age) if new_age else age
+            salary = float(new_salary) if new_salary else salary
+        except ValueError:
+            print("Error: Invalid input! Age must be an integer and salary must be a number.")
+            return
+        employees[emp_id] = (new_name, age, new_department, salary)
+        print("Employee details updated successfully!")
+    else:
+        print("Error: Employee not found!")
+
+def delete_employee():
+    emp_id = input("Enter Employee ID to delete: ").strip()
+    if emp_id in employees:
+        del employees[emp_id]
+        print("Employee deleted successfully!")
+    else:
+        print("Error: Employee not found!")
+
+def employees_by_department():
+    departments = set(emp[2] for emp in employees.values())
+    if not departments:
+        print("No employee found!")
+        return
+    for dept in departments:
+        print(f"\nDepartment: {dept}")
+        print("ID\tName\tAge\tSalary")
+        print("-" * 40)
+        for emp_id, details in employees.items():
+            if details[2] == dept:
+                print(f"{emp_id}\t{details[0]}\t{details[1]}\t{details[3]}")
+
+def average_salary():
+    if not employees:
+        print("No employees found!")
+        return
+    total_salary = sum(emp[3] for emp in employees.values())
+    avg_salary = total_salary / len(employees)
+    print(f"\nAverage Salary: {avg_salary:.2f}")
+
+# Main Menu Loop
+while True:
+    print("\nEmployee Management System")
+    print("1. Add Employee")
+    print("2. View Employees")
+    print("3. Search Employee")
+    print("4. Update Employee")
+    print("5. Delete Employee")
+    print("6. Employees by Department")
+    print("7. Average Salary")
+    print("8. Exit")
+    
+    choice = input("Enter your choice (1-8): ").strip()
+    
+    if choice == "1":
+        add_employee()
+    elif choice == "2":
+        view_employees()
+    elif choice == "3":
+        search_employee()
+    elif choice == "4":
+        update_employee()
+    elif choice == "5":
+        delete_employee()
+    elif choice == "6":
+        employees_by_department()
+    elif choice == "7":
+        average_salary()
+    elif choice == "8":
+        print("Exiting the system. Goodbye!")
+        break
+    else:
+        print("Invalid choice! Please enter a number between 1 and 8.")
+
